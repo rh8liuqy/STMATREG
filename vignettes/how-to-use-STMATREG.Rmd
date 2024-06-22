@@ -1,27 +1,30 @@
+---
+title: "How to use the STMATREG package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to use the STMATREG package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# STMATREG
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-The `STMATREG` package incorporates a linear regression based on the matrix variant skew-t distribution using the asynchronous parallel ECME, regular parallel ECME, and regular non-parallel ECME algorithms.
-
-## Installation
-
-The core dependency, `async` package, does not support the Windows operating system. Therefore, the `STMATREG` package is only available on UNIX operating systems.
-
-You can install the development version of `STMATREG` like so:
-
-``` r
-if(require(devtools)) {
-  devtools::install_github(repo = "rh8liuqy/STMATREG",build_vignettes = TRUE)
-}
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
-## Data Simulation
-
-``` r
+```{r setup}
 library(STMATREG)
+```
+
+# Introduction
+
+This package incorporates a linear regression based on the matrix variant skew-t distribution using the asynchronous parallel ECME, regular parallel ECME, and regular non-parallel ECME algorithms.
+
+# Data Simulation
+
+```{r}
 # Define the type of log-likelihood
 log_pdf_type <- "skewT"
 # Define the covariance matrix structure
@@ -49,9 +52,9 @@ X <- simulated_data$X # A list of covariate matrices
 ti <- simulated_data$ti # A list of records of time lapses
 ```
 
-## Maximum Likelihood Estimation via the ECME Algorithm
+# Maximum Likelihood Estimation via the ECME Algorithm
 
-``` r
+```{r,warning=FALSE,message=FALSE}
 ECME_output <- ECME(EM_type = "ADECME", # Must be one of "ADECME", "RPECME" and "RNECME".
                     N_cores = 8, # The number of cores in the computer.
                     N_wait = 7, # Must be no larger than N_cores.
@@ -61,3 +64,4 @@ ECME_output <- ECME(EM_type = "ADECME", # Must be one of "ADECME", "RPECME" and 
                     X = X,
                     ti = ti)
 ```
+
