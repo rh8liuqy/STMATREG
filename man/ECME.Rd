@@ -4,24 +4,48 @@
 \alias{ECME}
 \title{The ECME function for the linear regression model based on the matrix-variant skewT distribution.}
 \usage{
-ECME(EM_type, N_cores, N_wait, Sigma_type, log_pdf_type, Y, X, ti)
+ECME(
+  EM_type,
+  N_cores,
+  N_wait,
+  Sigma_type,
+  log_pdf_type,
+  Y,
+  X,
+  ti,
+  beta_value,
+  A_value,
+  DEC_value,
+  Psi_value,
+  nu_value
+)
 }
 \arguments{
-\item{EM_type}{Must be one of "ADECME", "RPECME" and "RNECME".}
+\item{EM_type}{must be one of "ADECME", "RPECME" and "RNECME".}
 
-\item{N_cores}{The number of cores in the computer.0}
+\item{N_cores}{the number of cores in the computer.0}
 
-\item{N_wait}{Wait for the number of cores to complete the E steps. Must be less than num_cores.}
+\item{N_wait}{wait for the number of cores to complete the E steps. Must be less than num_cores.}
 
-\item{Sigma_type}{A character. Must be either "DEC" or "diagonal".}
+\item{Sigma_type}{a character. Must be either "DEC" or "diagonal".}
 
-\item{log_pdf_type}{A character. Must be either "skewT" or "N".}
+\item{log_pdf_type}{a character. Must be either "skewT" or "N".}
 
-\item{Y}{The list of response matrices.}
+\item{Y}{the list of response matrices.}
 
-\item{X}{The list of design matrices.}
+\item{X}{the list of design matrices.}
 
-\item{ti}{The list of measurement times.}
+\item{ti}{the list of measurement times.}
+
+\item{beta_value}{the initial value of beta.}
+
+\item{A_value}{the initial value of A.}
+
+\item{DEC_value}{the initial value of DEC.}
+
+\item{Psi_value}{the initial value of Psi.}
+
+\item{nu_value}{the initial value of nu.}
 }
 \value{
 NULL.

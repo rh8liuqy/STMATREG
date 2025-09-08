@@ -1,19 +1,35 @@
 #' The ECME function for the linear regression model based on the matrix-variant skewT distribution.
 #'
-#' @param EM_type Must be one of "ADECME", "RPECME" and "RNECME".
-#' @param N_cores  The number of cores in the computer.0
-#' @param N_wait  Wait for the number of cores to complete the E steps. Must be less than num_cores.
-#' @param Sigma_type A character. Must be either "DEC" or "diagonal". 
-#' @param log_pdf_type A character. Must be either "skewT" or "N". 
-#' @param Y The list of response matrices.
-#' @param X The list of design matrices.
-#' @param ti The list of measurement times.
+#' @param EM_type must be one of "ADECME", "RPECME" and "RNECME".
+#' @param N_cores  the number of cores in the computer.0
+#' @param N_wait  wait for the number of cores to complete the E steps. Must be less than num_cores.
+#' @param Sigma_type a character. Must be either "DEC" or "diagonal". 
+#' @param log_pdf_type a character. Must be either "skewT" or "N". 
+#' @param Y the list of response matrices.
+#' @param X the list of design matrices.
+#' @param ti the list of measurement times.
+#' @param beta_value the initial value of beta.
+#' @param A_value the initial value of A.
+#' @param DEC_value the initial value of DEC.
+#' @param Psi_value the initial value of Psi.
+#' @param nu_value the initial value of nu.
 #'
 #' @return NULL.
 #' @export
-ECME <- function(EM_type,N_cores,N_wait,Sigma_type,log_pdf_type,Y,X,ti) {
+ECME <- function(EM_type,
+                 N_cores,
+                 N_wait,
+                 Sigma_type,
+                 log_pdf_type,
+                 Y,
+                 X,
+                 ti,
+                 beta_value,
+                 A_value,
+                 DEC_value,
+                 Psi_value,
+                 nu_value) {
   
-  # ensure EM type is one of "ADECME", "RPECME", "RNECME"
   if (! (EM_type %in% c("ADECME", "RPECME", "RNECME"))) {
     stop("EM type must be either ADECME, RPECME or RNECME")
   }
@@ -26,6 +42,15 @@ ECME <- function(EM_type,N_cores,N_wait,Sigma_type,log_pdf_type,Y,X,ti) {
     N_cores <- 1
     N_wait <- 1
   }
+  
+  if (EM_type == "ADECME") {
+    EM_type <- "ADECM"
+  } else if (EM_type == "RPECME") {
+    EM_type <- "RPECM"
+  } else {
+    EM_type <- "RNECM"
+  }
+  
   # save setting in the global environment
   assign("EM_type",EM_type, envir = .GlobalEnv)
   assign("N_cores",N_cores, envir = .GlobalEnv)
@@ -37,6 +62,8 @@ ECME <- function(EM_type,N_cores,N_wait,Sigma_type,log_pdf_type,Y,X,ti) {
   assign("tol",1e-7, envir = .GlobalEnv)
   assign("maxit",1000, envir = .GlobalEnv)
   assign("update_iter",1, envir = .GlobalEnv)
+  assign("log_pdf_type",log_pdf_type,envir = .GlobalEnv)
+  assign("Sigma_type",Sigma_type,envir = .GlobalEnv)
   
   # save the data in the global environment
   assign("Y",Y, envir = .GlobalEnv)
@@ -46,14 +73,32 @@ ECME <- function(EM_type,N_cores,N_wait,Sigma_type,log_pdf_type,Y,X,ti) {
   p <- ncol(Y[[1]])
   q <- ncol(X[[1]])
   
+  if (nrow(beta_value) != q | ncol(beta_value) != p) {
+    stop("The dimension of beta_value is incorrect.")
+  }
+  
+  if (length(A_value) != p) {
+    stop("The dimension of A_value is incorrect.")
+  }
+  
+  if (! all(DEC_value %in% c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)) | length(DEC_value) != 2 ) {
+    stop("DEC_value must be two of c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9).")
+  }
+  
+  if (! is.matrix(Psi_value) | ! isSymmetric(Psi_value)) {
+    stop("The initial value of Psi is not correct.")
+  }
+  
+  if (nu_value <= 0.0) {
+    stop("nu_value must be positive")
+  }
+  
   # initial values for the ECM function
-  assign("beta_value",matrix(rnorm(n = q*p), nrow = q), envir = .GlobalEnv)
-  assign("A_value",rnorm(n = p), envir = .GlobalEnv)
-  assign("DEC_value",sample(c(0.5,0.6,0.7,0.8,0.9), size = 2, replace = TRUE), envir = .GlobalEnv)
-  assign("Psi_dim",p, envir = .GlobalEnv)
-  assign("Psi_half",matrix(runif(Psi_dim^2)*2-1, ncol=Psi_dim), envir = .GlobalEnv)
-  assign("Psi_value",t(Psi_half) %*% Psi_half, envir = .GlobalEnv)
-  assign("nu_value",4 + rgamma(n = 1, shape = 2, rate = 1), envir = .GlobalEnv)
+  assign("beta_value",beta_value, envir = .GlobalEnv)
+  assign("A_value",A_value, envir = .GlobalEnv)
+  assign("DEC_value",DEC_value, envir = .GlobalEnv)
+  assign("Psi_value",Psi_value, envir = .GlobalEnv)
+  assign("nu_value",nu_value, envir = .GlobalEnv)
   script_path1 <- system.file("/source_code/AD_ECM.R",package = "STMATREG")
   script_path2 <- system.file("/source_code/AD_ECM_global.R",package = "STMATREG")
   source(script_path1)

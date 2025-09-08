@@ -1,7 +1,7 @@
 Package: STMATREG
 Type: Package
 Title: Matrix Variant Skew-t Regression via Asynchronous Distributed ECME Algorithm
-Version: 1.0
+Version: 1.1
 Date: 2024-06-16
 Authors@R: c(
     person("Qingyang", "Liu", email = "rh8liuqy@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3265-6330")),
@@ -32,5 +32,5 @@ Suggests:
 OS_type: unix
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr

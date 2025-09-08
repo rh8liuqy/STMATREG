@@ -22,10 +22,7 @@ if(require(devtools)) {
 
 ``` r
 library(STMATREG)
-# Define the type of log-likelihood
-log_pdf_type <- "skewT"
-# Define the covariance matrix structure
-Sigma_type <- "DEC"
+
 # Set the sample size as 200
 N <- 200
 # Set the true values of parameters
@@ -52,12 +49,19 @@ ti <- simulated_data$ti # A list of records of time lapses
 ## Maximum Likelihood Estimation via the ECME Algorithm
 
 ``` r
-ECME_output <- ECME(EM_type = "ADECME", # Must be one of "ADECME", "RPECME" and "RNECME".
-                    N_cores = 8, # The number of cores in the computer.
-                    N_wait = 7, # Must be no larger than N_cores.
-                    Sigma_type="DEC", # Must be one of "DEC" and "diagonal"
-                    log_pdf_type= "skewT", # Must be "skewT" or "N".
-                    Y = Y,
-                    X = X,
-                    ti = ti)
+ECME(EM_type = "ADECME", # Must be one of "ADECME", "RPECME" and "RNECME".
+     N_cores = 8, # The number of cores in the computer.
+     N_wait = 7, # Must be no larger than N_cores.
+     Sigma_type= "DEC", # Must be one of "DEC" and "diagonal"
+     log_pdf_type= "skewT", # Must be "skewT" or "N".
+     Y = Y,
+     X = X,
+     ti = ti,
+     beta_value = true_beta,
+     A_value = true_A,
+     DEC_value = true_DEC,
+     Psi_value = true_Psi,
+     nu_value = true_nu)
+print(output)
 ```
+
