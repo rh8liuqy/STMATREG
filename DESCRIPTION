@@ -12,15 +12,15 @@ License: GPL (>= 3)
 Depends: 
     R (>= 3.4.0)
 Imports: 
-    MASS (>= 7.3-58.4),
+    MASS,
     Rcpp,
     RcppArmadillo,
-    numDeriv (>= 2016.8-1.1),
-    tidyverse (>= 2.0.0),
-    mvtnorm (>= 1.2-4),
-    rootSolve (>= 1.8.2.4),
-    methods (>= 4.3.0),
-    async (>= 0.1)
+    numDeriv,
+    tidyverse,
+    mvtnorm,
+    rootSolve,
+    methods,
+    async
 Remotes: 
     gitlab::luke-tierney/async
 LinkingTo: 
