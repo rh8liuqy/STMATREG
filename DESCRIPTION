@@ -13,8 +13,8 @@ Depends:
     R (>= 3.4.0)
 Imports: 
     MASS (>= 7.3-58.4),
-    Rcpp (>= 1.0.12),
-    RcppArmadillo (>= 0.12.6.6.1),
+    Rcpp,
+    RcppArmadillo,
     numDeriv (>= 2016.8-1.1),
     tidyverse (>= 2.0.0),
     mvtnorm (>= 1.2-4),
@@ -24,8 +24,8 @@ Imports:
 Remotes: 
     gitlab::luke-tierney/async
 LinkingTo: 
-    Rcpp (>= 1.0.12),
-    RcppArmadillo (>= 0.12.6.6.1)
+    Rcpp,
+    RcppArmadillo
 Suggests:
     knitr,
     rmarkdown
